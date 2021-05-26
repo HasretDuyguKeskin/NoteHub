@@ -13,5 +13,6 @@ namespace NoteHub.API.Data
         {
 
         }
+        public DbSet<Note> Notes { get; set; }
     }
 }

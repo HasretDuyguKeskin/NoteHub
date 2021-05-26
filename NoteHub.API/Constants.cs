@@ -9,7 +9,7 @@ namespace NoteHub.API
     {
         public const string DEFAULT_EMAIL= "admin@example.com";
         public const string DEFAULT_PASSWORD = "P@ssword1";
-        public const string AUTH_SİGNİNG_KEY = "kh66_jbSDHg554fgkdFkv8l7&½$]$62+/V&75NF*d2sd-hNk5c%dh42sK8Jdjm7";
+        public const string AUTH_SIGNING_KEY = "kh66_jbSDHg554fgkdFkv8l7&½$]$62+/V&75NF*d2sd-hNk5c%dh42sK8Jdjm7";
 
         public static class Roles
         {

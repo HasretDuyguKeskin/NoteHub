@@ -18,13 +18,15 @@ namespace NoteHub.API.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
+
         private readonly UserManager<ApplicationUser> _userManager;
+
         public AccountController(UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
         }
-        [Route("Login")]
-        [HttpPost]
+
+        [HttpPost("Login")]
         public async Task<IActionResult> Login(LoginModel model)
         {
             if (ModelState.IsValid)
@@ -34,35 +36,51 @@ namespace NoteHub.API.Controllers
                 {
                     ModelState.AddModelError("", "Invalid username or password!");
                     return BadRequest(ModelState);
-
                 }
 
-                var autClaims = new List<Claim>()
+                var authClaims = new List<Claim>()
                 {
-                    new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                    new Claim(JwtRegisteredClaimNames.Sub, user.Id),
+                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                 };
 
                 foreach (string role in await _userManager.GetRolesAsync(user))
                 {
-                    autClaims.Add(new Claim(ClaimTypes.Role, role));
+                    authClaims.Add(new Claim(ClaimTypes.Role, role));
                 }
-                var authSigninKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Constants.AUTH_SİGNİNG_KEY));
+
+                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Constants.AUTH_SIGNING_KEY));
 
                 var token = new JwtSecurityToken(
-                    issuer: "",
-                    audience: "",
-                    claims: autClaims,
+                    claims: authClaims,
                     expires: DateTime.Now.AddYears(1),
-                    signingCredentials: new SigningCredentials(authSigninKey, SecurityAlgorithms.HmacSha256)
-                    );
+                    signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+                );
+
                 return Ok(new
                 {
                     token = new JwtSecurityTokenHandler().WriteToken(token),
                     expiration = token.ValidTo
                 });
-
             }
+
+            return BadRequest(ModelState);
+        }
+        [HttpPost("Register")]
+        public async Task<IActionResult> Register(RegisterModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new ApplicationUser()
+                {
+                    Email = model.Email,
+                    UserName = model.Email
+                };
+                await _userManager.CreateAsync(user, model.Password);
+                return Ok();
+            }
+
             return BadRequest(ModelState);
         }
     }

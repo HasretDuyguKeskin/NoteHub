@@ -45,14 +45,20 @@ namespace NoteHub.API
             }).AddJwtBearer(options =>
             {
                 options.SaveToken = true;
-                //options.RequireHttpsMetadata = false;
-                options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+                // options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters()
                 {
                     ValidateIssuer = false,
                     ValidateAudience = false,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Constants.AUTH_SÝGNÝNG_KEY))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Constants.AUTH_SIGNING_KEY))
                 };
             });
+
+            // https://docs.microsoft.com/en-us/aspnet/core/security/cors?view=aspnetcore-5.0
+            services.AddCors(options =>
+                options.AddDefaultPolicy(
+                    builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()
+            ));
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -74,6 +80,7 @@ namespace NoteHub.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseCors();
             app.UseAuthentication();
             app.UseAuthorization();
 
