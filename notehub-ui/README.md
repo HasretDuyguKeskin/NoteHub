@@ -72,5 +72,9 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 ### links
 
 https://react-bootstrap.github.io/getting-started/introduction
+https://marketplace.visualstudio.com/items?itemName=dsznajder.es7-react-js-snippets
 
-https://react-bootstrap.github.io/components/forms/
+### vscode extensions
+ES7 React/Redux/GraphQL/React-Native snippets
+
+
