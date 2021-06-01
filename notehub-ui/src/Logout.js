@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
+import AppContext from './AppContext';
 
 function Logout() {
-    // todo: token'ı sil
-    return (
-        <Redirect to="/login?logout=success" />
-    )
+    const ctx = useContext(AppContext);
+    useEffect(() => {
+        ctx.setIsLoggedIn(false);
+        ctx.setToken(null);
+        // todo: localStorage'dan token'ı sil
+    });
+  
+    return <Redirect to="/login?logout=success" />
 }
 
 export default Logout
