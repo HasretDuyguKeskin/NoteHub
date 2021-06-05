@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 
 import 'bootstrap/dist/css/bootstrap.min.css'
+import '@fortawesome/fontawesome-free/css/all.min.css';
 import './App.css';
 import Home from './Home'
 import Register from './Register';
@@ -16,11 +17,13 @@ import Login from './Login';
 import Logout from './Logout';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
-  const [token, setToken] = useState("null");
+  const tokenString = sessionStorage["token"] || localStorage["token"] || null;
+  const [isLoggedIn, setIsLoggedIn] = useState(tokenString != null);
+  const [token, setToken] = useState(tokenString);
+  const [username, setUsername] = useState(sessionStorage["username"] || localStorage["username"] || null);
 
   return (
-    <AppContext.Provider value={{ token, setToken, isLoggedIn, setIsLoggedIn }}>
+    <AppContext.Provider value={{ token, setToken, isLoggedIn, setIsLoggedIn, username, setUsername }}>
       <Router>
         <Switch>
           <Route path="/register">

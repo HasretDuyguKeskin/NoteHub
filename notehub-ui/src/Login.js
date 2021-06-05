@@ -4,14 +4,14 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Alert from 'react-bootstrap/Alert';
-import { Link, useLocation ,useHistory} from 'react-router-dom';
+import { Link, useLocation, useHistory } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 
 function Login() {
-    const history=useHistory();
+    const history = useHistory();
     const ctx = useContext(AppContext);
     const query = new URLSearchParams(useLocation().search);
     const qlogout = query.get("logout");
@@ -31,7 +31,7 @@ function Login() {
         setErrors([]);
         e.preventDefault();
 
-        axios.post("https://localhost:44332/api/Account/Login", {
+        axios.post(process.env.REACT_APP_API_ROOT + "/api/Account/Login", {
             username: email,
             password: password
         })
@@ -48,19 +48,24 @@ function Login() {
                     localStorage.removeItem("username");
                     localStorage.removeItem("token");
                 }
+                ctx.setUsername(email);
                 ctx.setToken(response.data.token);
                 ctx.setIsLoggedIn(true);
                 history.push("/");
             })
             .catch(function (error) {
-                if (error.response.data.errors) {
+                // console.log(error);
+                if (!errors.response) {
+                    setErrors(["Cannot connect to server. Please try again later."]);
+                    return;
+                }
+                if (error.response.data && error.response.data.errors) {
                     const messages = [];
                     for (const key in error.response.data.errors) {
                         messages.push(...error.response.data.errors[key]);
                     }
                     setErrors(messages);
                 }
-
             });
     };
 
