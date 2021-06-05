@@ -121,20 +121,23 @@ function Home() {
                         </ListGroup>
                     </Col>
                     <Col className="h-100" sm={8} md={9}>
-                        <Form className="py-3 h-100 d-flex flex-column">
-                            <Form.Group>
-                                <Form.Control type="text" placeholder="Title" value={note.title} onChange={(e) => setNote({ ...note, title: e.target.value })} />
-                            </Form.Group>
-                            <Form.Group className="flex-fill">
-                                <Form.Control className="h-100" as="textarea" rows={10} placeholder="Content" value={note.content}
-                                    onChange={(e) => setNote({ ...note, content: e.target.value })} />
-                            </Form.Group>
-                            <div>
-                                <Button variant="primary" onClick={handleSaveClick}>Save</Button>
-                                <Button variant="danger" className="ml-2" onClick={handleDeleteClick}>Delete</Button>
-                                {/* <p>{note.id} {note.title} {note.content}</p> */}
-                            </div>
-                        </Form>
+                        {
+                            note.id == 0 ? <Form></Form> :
+                                <Form className="py-3 h-100 d-flex flex-column">
+                                    <Form.Group>
+                                        <Form.Control type="text" placeholder="Title" value={note.title} onChange={(e) => setNote({ ...note, title: e.target.value })} />
+                                    </Form.Group>
+                                    <Form.Group className="flex-fill">
+                                        <Form.Control className="h-100" as="textarea" rows={10} placeholder="Content" value={note.content}
+                                            onChange={(e) => setNote({ ...note, content: e.target.value })} />
+                                    </Form.Group>
+                                    <div>
+                                        <Button variant="primary" onClick={handleSaveClick}>Save</Button>
+                                        <Button variant="danger" className="ml-2" onClick={handleDeleteClick}>Delete</Button>
+                                        {/* <p>{note.id} {note.title} {note.content}</p> */}
+                                    </div>
+                                </Form>
+                        }
                     </Col>
                 </Row>
             </Container>
