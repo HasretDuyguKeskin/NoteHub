@@ -24,7 +24,7 @@ function App() {
 
   return (
     <AppContext.Provider value={{ token, setToken, isLoggedIn, setIsLoggedIn, username, setUsername }}>
-      <Router>
+      <Router basename="https://github.com/HasretDuyguKeskin">
         <Switch>
           <Route path="/register">
             <Register />
