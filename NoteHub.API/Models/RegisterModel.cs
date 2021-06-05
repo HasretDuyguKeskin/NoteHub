@@ -16,6 +16,6 @@ namespace NoteHub.API.Models
         public string Password { get; set; }
         [Required]
         [Compare("Password")]
-        public int MyProperty { get; set; }
+        public string ConfirmPassword { get; set; }
     }
 }

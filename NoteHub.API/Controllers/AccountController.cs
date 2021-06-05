@@ -35,7 +35,7 @@ namespace NoteHub.API.Controllers
                 if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
                 {
                     ModelState.AddModelError("", "Invalid username or password!");
-                //https://stackoverflow.com/questions/55289631/inconsistent-behaviour-with-modelstate-validation-asp-net-core-api
+                    //https://stackoverflow.com/questions/55289631/inconsistent-behaviour-with-modelstate-validation-asp-net-core-api
 
                     return ValidationProblem(ModelState);
                 }
@@ -79,8 +79,16 @@ namespace NoteHub.API.Controllers
                     Email = model.Email,
                     UserName = model.Email
                 };
-                await _userManager.CreateAsync(user, model.Password);
-                return Ok();
+                IdentityResult result = await _userManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    return Ok();
+                }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+
+                }
             }
 
             return ValidationProblem(ModelState);
